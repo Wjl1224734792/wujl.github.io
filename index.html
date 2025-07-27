@@ -2,414 +2,835 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>吴建霖 - 个人主页</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#165DFF',
-            secondary: '#36CFC9',
-            dark: '#1D2129',
-            light: '#F2F3F5'
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        },
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吴建霖 - 个人主页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#10b981',
+                        dark: '#111827',
+                        light: '#f3f4f6',
+                        accent: '#f97316'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+      .content-auto {
+        content-visibility: auto;
       }
-    }
-  </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .text-shadow {
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      .animate-float-delay {
+        animation: float 6s ease-in-out 2s infinite;
+      }
+      .skill-bar {
+        position: relative;
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .skill-progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transition: width 1.5s ease-in-out;
+        width: 0;
       }
       .card-hover {
         transition: all 0.3s ease;
       }
       .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        transform: translateY(-10px);
       }
+      .nav-scrolled {
+        @apply bg-dark/95 shadow-lg backdrop-blur-md;
+      }
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
     }
   </style>
 </head>
 
-<body class="bg-gray-50 font-sans text-dark">
-  <!-- 导航栏 -->
-  <nav class="sticky top-0 bg-white/90 backdrop-blur-sm shadow-sm z-50">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <h1 class="text-xl font-bold text-primary">吴建霖的主页</h1>
-      <div class="hidden md:flex space-x-6">
-        <a href="#info" class="text-gray-600 hover:text-primary transition-colors">基本信息</a>
-        <a href="#education" class="text-gray-600 hover:text-primary transition-colors">教育背景</a>
-        <a href="#skills" class="text-gray-600 hover:text-primary transition-colors">专业技能</a>
-        <a href="#internship" class="text-gray-600 hover:text-primary transition-colors">实习经历</a>
-        <a href="#projects" class="text-gray-600 hover:text-primary transition-colors">项目经历</a>
-        <a href="#objective" class="text-gray-600 hover:text-primary transition-colors">求职意向</a>
-      </div>
-      <button class="md:hidden text-gray-600" id="menuToggle">
-        <i class="fa fa-bars text-xl"></i>
-      </button>
-    </div>
-    <!-- 移动端菜单 -->
-    <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
-      <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
-        <a href="#info" class="text-gray-600 hover:text-primary py-2 transition-colors">基本信息</a>
-        <a href="#education" class="text-gray-600 hover:text-primary py-2 transition-colors">教育背景</a>
-        <a href="#skills" class="text-gray-600 hover:text-primary py-2 transition-colors">专业技能</a>
-        <a href="#internship" class="text-gray-600 hover:text-primary py-2 transition-colors">实习经历</a>
-        <a href="#projects" class="text-gray-600 hover:text-primary py-2 transition-colors">项目经历</a>
-        <a href="#objective" class="text-gray-600 hover:text-primary py-2 transition-colors">求职意向</a>
-      </div>
-    </div>
-  </nav>
+<body class="font-inter bg-dark text-light overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4">
+        <div class="container mx-auto px-4 md:px-8 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-gradient bg-gradient-to-r from-primary to-secondary">
+                吴建霖
+            </a>
 
-  <!-- 头部横幅 -->
-  <header class="bg-gradient-to-r from-primary to-secondary text-white py-16 md:py-24">
-    <div class="container mx-auto px-4 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow">吴建霖</h1>
-      <p class="text-xl md:text-2xl max-w-2xl mx-auto opacity-90">前端开发工程师 | 全栈开发者 | AI技术爱好者</p>
-    </div>
-  </header>
+            <!-- 桌面导航 -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-primary transition-colors">关于我</a>
+                <a href="#skills" class="hover:text-primary transition-colors">技能</a>
+                <a href="#projects" class="hover:text-primary transition-colors">项目</a>
+                <a href="#experience" class="hover:text-primary transition-colors">经历</a>
+                <a href="#contact" class="hover:text-primary transition-colors">联系我</a>
+            </div>
 
-  <main class="container mx-auto px-4 py-12">
-    <!-- 基本信息 -->
-    <section id="info" class="mb-16">
-      <div class="flex items-center mb-6">
-        <div class="w-10 h-1 bg-primary mr-3"></div>
-        <h2 class="text-2xl md:text-3xl font-bold">基本信息</h2>
-      </div>
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 grid md:grid-cols-3 gap-6">
-        <div class="flex items-center">
-          <i class="fa fa-phone text-primary text-xl mr-4"></i>
-          <span>18124630859</span>
-        </div>
-        <div class="flex items-center">
-          <i class="fa fa-weixin text-primary text-xl mr-4"></i>
-          <span>WJL18124630859</span>
-        </div>
-        <div class="flex items-center">
-          <i class="fa fa-envelope text-primary text-xl mr-4"></i>
-          <span>wujl1124@qq.com</span>
-        </div>
-        <div class="flex items-center md:col-span-3">
-          <i class="fa fa-github text-primary text-xl mr-4"></i>
-          <a href="https://github.com/Wjl1224734792" target="_blank"
-            class="text-primary hover:underline">https://github.com/Wjl1224734792</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 教育背景 -->
-    <section id="education" class="mb-16">
-      <div class="flex items-center mb-6">
-        <div class="w-10 h-1 bg-primary mr-3"></div>
-        <h2 class="text-2xl md:text-3xl font-bold">教育背景</h2>
-      </div>
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">罗定职业技术学院</h3>
-          <span class="text-gray-500">2022.09 - 2025.07</span>
-        </div>
-        <p class="text-gray-700 mb-2">数字媒体技术专业</p>
-        <div class="flex items-center">
-          <span class="bg-blue-100 text-primary px-3 py-1 rounded-full text-sm">GPA: 3.5/4.0</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 专业技能 -->
-    <section id="skills" class="mb-16">
-      <div class="flex items-center mb-6">
-        <div class="w-10 h-1 bg-primary mr-3"></div>
-        <h2 class="text-2xl md:text-3xl font-bold">专业技能</h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- AI技能 -->
-        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
-          <div class="flex items-center mb-4">
-            <i class="fa fa-robot text-primary text-2xl mr-3"></i>
-            <h3 class="text-xl font-semibold">AI技能</h3>
-          </div>
-          <ul class="space-y-2 text-gray-700">
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>大模型部署</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>N8N工作流</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>LLM+RAG+MCP</span>
-            </li>
-          </ul>
+            <!-- 移动端菜单按钮 -->
+            <button id="menuBtn" class="md:hidden text-2xl">
+                <i class="fa fa-bars"></i>
+            </button>
         </div>
 
-        <!-- 前端技术 -->
-        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
-          <div class="flex items-center mb-4">
-            <i class="fa fa-code text-primary text-2xl mr-3"></i>
-            <h3 class="text-xl font-semibold">前端技术</h3>
-          </div>
-          <ul class="space-y-2 text-gray-700">
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>熟悉Vue3全家桶、Uniapp跨端，了解react框架，Electron打包</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>掌握JS(ES6+)、TS、HTML、CSS</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>熟悉ElementPlus等UI框架及sass</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>熟悉Vite，了解Webpack</span>
-            </li>
-          </ul>
+        <!-- 移动端导航菜单 -->
+        <div id="mobileMenu"
+            class="md:hidden bg-dark/95 backdrop-blur-md absolute w-full left-0 top-full py-4 px-4 hidden shadow-lg">
+            <div class="flex flex-col space-y-4">
+                <a href="#about" class="hover:text-primary transition-colors py-2">关于我</a>
+                <a href="#skills" class="hover:text-primary transition-colors py-2">技能</a>
+                <a href="#projects" class="hover:text-primary transition-colors py-2">项目</a>
+                <a href="#experience" class="hover:text-primary transition-colors py-2">经历</a>
+                <a href="#contact" class="hover:text-primary transition-colors py-2">联系我</a>
+            </div>
         </div>
+    </nav>
 
-        <!-- 后端技术 -->
-        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover md:col-span-2">
-          <div class="flex items-center mb-4">
-            <i class="fa fa-server text-primary text-2xl mr-3"></i>
-            <h3 class="text-xl font-semibold">后端技术</h3>
-          </div>
-          <ul class="space-y-2 text-gray-700">
-            <li class="flex items-start">
-              <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
-              <span>熟悉Node.js、Express.js中间件开发</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 实习经历 -->
-    <section id="internship" class="mb-16">
-      <div class="flex items-center mb-6">
-        <div class="w-10 h-1 bg-primary mr-3"></div>
-        <h2 class="text-2xl md:text-3xl font-bold">实习经历</h2>
-      </div>
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">深圳市北天通讯有限公司</h3>
-          <span class="text-gray-500">2025.03 - 2025.05</span>
-        </div>
-        <p class="text-primary font-medium mb-4">前端开发工程师</p>
-        <ul class="space-y-3 text-gray-700">
-          <li class="flex items-start">
+    <!-- 英雄区 -->
+    <section id="hero" class="min-h-screen flex items-center relative overflow-hidden pt-20">
+        <!-- 背景装饰 -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute w-96 h-96 bg-primary/20 rounded-full filter blur-3xl -top-20 -left-20 animate-float">
+            </div>
             <div
-              class="bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-              1</div>
-            <span><strong>参与开发：</strong>积极参与管理平台基础页面开发，保障首页布局契合设计规范。</span>
-          </li>
-          <li class="flex items-start">
-            <div
-              class="bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-              2</div>
-            <span><strong>负责模块：</strong>负责用户管理模块，实现分页查询与批量操作，提升用户体验。</span>
-          </li>
-          <li class="flex items-start">
-            <div
-              class="bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-              3</div>
-            <span><strong>完成功能：</strong>高效完成消息管理功能开发，实现列表渲染及状态切换，优化信息传递。</span>
-          </li>
-          <li class="flex items-start">
-            <div
-              class="bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-              4</div>
-            <span><strong>助力开发：</strong>协同助力文件管理模块，完成单文件上传功能开发，简化文件处理流程。</span>
-          </li>
-        </ul>
-      </div>
+                class="absolute w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl bottom-20 right-10 animate-float-delay">
+            </div>
+            <div class="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"></div>
+        </div>
+
+        <div class="container mx-auto px-4 md:px-8 z-10">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 space-y-6">
+                    <h4
+                        class="text-primary text-lg md:text-xl font-semibold tracking-wider animate-on-scroll opacity-0 translate-y-4 transition-all duration-700">
+                        前端开发工程师
+                    </h4>
+                    <h1
+                        class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-tight animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-100">
+                        用代码创造<br>
+                        <span class="text-gradient bg-gradient-to-r from-primary to-secondary">数字体验</span>
+                    </h1>
+                    <p
+                        class="text-gray-300 text-lg md:text-xl max-w-lg animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-200">
+                        专注于前端开发与AI应用的全栈开发者，热衷于构建高效、美观且用户友好的数字产品。
+                    </p>
+                    <div
+                        class="flex flex-wrap gap-4 pt-4 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-300">
+                        <a href="#contact"
+                            class="px-8 py-3 bg-primary hover:bg-primary/90 rounded-lg font-medium transition-all shadow-lg shadow-primary/20">
+                            联系我
+                        </a>
+                        <a href="#projects"
+                            class="px-8 py-3 bg-transparent border border-primary/50 hover:border-primary rounded-lg font-medium transition-all">
+                            查看项目
+                        </a>
+                    </div>
+                </div>
+
+                <div
+                    class="md:w-1/2 flex justify-center animate-on-scroll opacity-0 translate-y-4 transition-all duration-1000 delay-300">
+                    <div class="relative">
+                        <div
+                            class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary/30 shadow-xl shadow-primary/20">
+                            <img src="./img/me.png" alt="吴建霖" class="w-full h-full object-cover">
+                        </div>
+                        <div
+                            class="absolute -bottom-4 -right-4 bg-dark p-4 rounded-lg shadow-lg border border-primary/30">
+                            <div class="flex items-center gap-2">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-code text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-400">全栈开发</div>
+                                    <div class="font-semibold">3+ 项目经验</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 滚动指示器 -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <a href="#about" class="text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-angle-down text-2xl"></i>
+                </a>
+            </div>
+        </div>
     </section>
 
-    <!-- 项目经历 -->
-    <section id="projects" class="mb-16">
-      <div class="flex items-center mb-6">
-        <div class="w-10 h-1 bg-primary mr-3"></div>
-        <h2 class="text-2xl md:text-3xl font-bold">项目经历</h2>
-      </div>
+    <!-- 关于我 -->
+    <section id="about" class="py-24 relative">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">关于我</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+            </div>
 
-      <!-- AI小三国 -->
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 mb-6 card-hover">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">AI小三国</h3>
-          <span class="text-gray-500">2025.05 - 2025.06</span>
-        </div>
-        <p class="text-primary font-medium mb-2">全栈独立开发</p>
-        <p class="text-blue-600 mb-4 hover:underline">
-          <a href="http://118.89.54.124:8089/webook/4091fa09-fb9a-4039-9411-7104d213f601/chat" target="_blank">
-            <i class="fa fa-link mr-1"></i>演示网址
-          </a>
-        </p>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="relative animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-100">
+                    <div class="aspect-[4/5] rounded-2xl overflow-hidden">
+                        <img src="./img/lzy.png" alt="关于吴建霖" class="w-full h-full object-cover">
+                    </div>
+                    <div
+                        class="absolute -bottom-6 -right-6 bg-dark p-6 rounded-xl shadow-xl border border-primary/20 max-w-xs">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">
+                                <i class="fa fa-graduation-cap text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">罗定职业技术学院</div>
+                                <div class="text-sm text-gray-400">数字媒体技术专业</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm">GPA: 3.5/4.0</p>
+                        <p class="text-gray-400 text-xs mt-2">2022.09 - 2025.07</p>
+                    </div>
+                </div>
 
-        <div class="mb-4">
-          <h4 class="font-semibold mb-2">项目描述：</h4>
-          <p class="text-gray-700">
-            一款支持快速部署的AI聊天机器人，可通过后台灵活搭建专属知识库，深度适配工作与生活场景，是高效实用的智能助手。更有熟读《三国演义》的专属AI分身，能精准回溯名著细节、解析人物关系，让你轻松玩转三国典故，随时随地唤醒记忆中的经典瞬间。
-          </p>
-        </div>
+                <div class="space-y-6 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-200">
+                    <h3 class="text-2xl font-bold">我是谁？</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        我是一名充满热情的前端开发工程师，专注于创建流畅、美观且功能强大的数字体验。我对新技术充满好奇心，尤其在AI应用与前端开发的结合方面有浓厚兴趣。
+                    </p>
+                    <p class="text-gray-300 leading-relaxed">
+                        在校期间，我系统学习了数字媒体技术相关知识，并通过实践项目不断提升自己的技术能力。我喜欢独立解决复杂问题，也享受团队协作带来的创意碰撞。
+                    </p>
 
-        <div class="mb-4">
-          <h4 class="font-semibold mb-2">核心职责：</h4>
-          <p class="text-gray-700">搭建助手，借助N8N搭建智能助手，运用LLM、VECTOR
-            STORE、EMBEDDING技术构建聊天AI，负责技术选型、流程搭建及功能实现，确保各技术组件有效协同，打造稳定高效的智能交互系统。</p>
+                    <div class="grid grid-cols-2 gap-6 pt-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-lightbulb-o"></i>
+                                </div>
+                                <span>问题解决能力</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-code"></i>
+                                </div>
+                                <span>代码整洁规范</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <span>持续学习心态</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-users"></i>
+                                </div>
+                                <span>团队协作精神</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div>
-          <h4 class="font-semibold mb-2">项目业绩：</h4>
-          <p class="text-gray-700">成果落地，成功实现基于《三国演义》全本的知识库助手，能精准响应读者关于名著内容的查询，为用户提供便捷的阅读辅助与信息获取渠道。</p>
-        </div>
-      </div>
-
-      <!-- 元枢 -->
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 mb-6 card-hover">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">元枢</h3>
-          <span class="text-gray-500">2025.02 - 2025.03</span>
-        </div>
-        <p class="text-primary font-medium mb-2">全栈独立开发</p>
-        <p class="text-blue-600 mb-4 hover:underline">
-          <a href="http://118.89.54.124:8080" target="_blank">
-            <i class="fa fa-link mr-1"></i>演示网址
-          </a>
-        </p>
-
-        <div class="mb-4">
-          <h4 class="font-semibold mb-2">项目概述：</h4>
-          <p class="text-gray-700">打造支持多角色权限控制的后台管理系统，涵盖8大核心模块，助力小微企业日常运营管理。</p>
-        </div>
-
-        <div class="mb-4">
-          <h4 class="font-semibold mb-2">核心职责：</h4>
-          <p class="text-gray-700">全栈开发，独立负责前后端工作，运用Vue3、Node.js等技术栈，搭建多项功能模块。</p>
-        </div>
-
-        <div>
-          <h4 class="font-semibold mb-2">项目业绩：</h4>
-          <p class="text-gray-700">代码攻坚，完成超23,000行代码编写，保障模块上线；优化体验，采用防抖节流提升页面流畅度；保障安全，实现数据库软删除机制，确保数据可追溯。</p>
-        </div>
-      </div>
-
-      <!-- 飞行之家 -->
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">飞行之家</h3>
-          <span class="text-gray-500">2024.12 - 2025.01</span>
-        </div>
-        <p class="text-primary font-medium mb-2">全栈独立开发</p>
-        <p class="text-blue-600 mb-4 hover:underline">
-          <a href="http://118.89.54.124:8000" target="_blank">
-            <i class="fa fa-link mr-1"></i>演示网址
-          </a>
-        </p>
-
-        <div class="mb-4">
-          <h4 class="font-semibold mb-2">项目概述：</h4>
-          <p class="text-gray-700">搭建平台，为飞行器爱好者打造交流空间，实现留言、评论、点赞等核心互动功能。</p>
-        </div>
-
-        <div class="mb-4">
-          <h4 class="font-semibold mb-2">核心职责：</h4>
-          <p class="text-gray-700">独立开发，负责前后端分离架构设计与开发，运用Vue3、Node.js等技术栈，搭配MySQL和1Panel部署。</p>
-        </div>
-
-        <div>
-          <h4 class="font-semibold mb-2">项目业绩：</h4>
-          <p class="text-gray-700">
-            代码实现，独立完成8000+行全栈代码，保障功能完整高效；追踪行为，建立日志系统提升运营效率；优化加载，将首屏加载时间缩至2秒内，改善用户体验；保障稳定，通过Docker和1Panel配置服务监控与自动重启机制。
-          </p>
-        </div>
-      </div>
     </section>
 
-    <!-- 求职意向 -->
-    <section id="objective" class="mb-16">
-      <div class="flex items-center mb-6">
-        <div class="w-10 h-1 bg-primary mr-3"></div>
-        <h2 class="text-2xl md:text-3xl font-bold">求职意向</h2>
-      </div>
-      <div class="bg-white rounded-xl shadow-md p-6 md:p-8 card-hover">
-        <div class="flex items-center">
-          <i class="fa fa-briefcase text-primary text-3xl mr-6"></i>
-          <div>
-            <h3 class="text-2xl font-semibold mb-2">前端开发工程师</h3>
-            <p class="text-gray-600">具备全栈开发能力，熟悉AI相关技术，期待在前端开发领域发挥所长</p>
-          </div>
+    <!-- 技能 -->
+    <section id="skills" class="py-24 bg-gray-900/50 relative">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">我的技能</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+                    我掌握了多种前端和后端技术，希望可以将AI能力与Web应用结合，创造智能、高效的用户体验。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- 技能图表 -->
+                <div
+                    class="bg-dark/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 shadow-lg animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-100">
+                    <h3 class="text-xl font-semibold mb-6">技能分布</h3>
+                    <div class="h-80">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 技能详情 -->
+                <div class="space-y-8 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-200">
+                    <!-- AI技能 -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fa fa-robot text-secondary mr-2"></i>
+                            AI技能
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>大模型部署</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-secondary" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>N8N工作流</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-secondary" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>LLM+RAG+MCP</span>
+                                    <span>80%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-secondary" data-width="80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 前端技术 -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fa fa-html5 text-orange-500 mr-2"></i>
+                            前端技术
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Vue3全家桶 / Uniapp</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-orange-500" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>JavaScript (ES6+) / TypeScript</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-orange-500" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>HTML / CSS / Sass</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-orange-500" data-width="95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 后端技术 -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fa fa-server text-blue-500 mr-2"></i>
+                            后端技术
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Node.js / Express.js</span>
+                                    <span>80%</span>
+                                </div>
+                                <div class="skill-bar bg-gray-700">
+                                    <div class="skill-progress bg-blue-500" data-width="80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
-  </main>
 
-  <!-- 页脚 -->
-  <footer class="bg-dark text-white py-8">
-    <div class="container mx-auto px-4 text-center">
-      <p class="mb-4">© 2025 吴建霖的个人主页</p>
-      <div class="flex justify-center space-x-4">
-        <a href="tel:18124630859" class="text-gray-300 hover:text-white transition-colors">
-          <i class="fa fa-phone"></i>
-        </a>
-        <a href="mailto:wujl1124@qq.com" class="text-gray-300 hover:text-white transition-colors">
-          <i class="fa fa-envelope"></i>
-        </a>
-        <a href="https://github.com/Wjl1224734792" target="_blank"
-          class="text-gray-300 hover:text-white transition-colors">
-          <i class="fa fa-github"></i>
-        </a>
-      </div>
-    </div>
-  </footer>
+    <!-- 项目 -->
+    <section id="projects" class="py-24 relative">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">我的项目</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+                    我独立开发了多个全栈项目，涵盖AI应用、后台管理系统和社交平台等多个领域。
+                </p>
+            </div>
 
-  <script>
-    // 移动端菜单切换
-    document.getElementById('menuToggle').addEventListener('click', function () {
-      const mobileMenu = document.getElementById('mobileMenu');
-      mobileMenu.classList.toggle('hidden');
-    });
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 项目1 -->
+                <div
+                    class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 shadow-lg card-hover animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-100">
+                    <div class="h-48 overflow-hidden">
+                        <img src="./img/AI.png" alt="AI小三国"
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold">AI小三国</h3>
+                            <span class="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full">全栈独立开发</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            一款支持快速部署的AI聊天机器人，可通过后台灵活搭建专属知识库，深度适配工作与生活场景，更有熟读《三国演义》的专属AI分身。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">N8N</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">LLM</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">VECTOR STORE</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">Vue3</span>
+                        </div>
+                        <a href="http://118.89.54.124:8089/webook/4091fa09-fb9a-4039-9411-7104d213f601/chat"
+                            target="_blank"
+                            class="inline-flex items-center text-primary hover:text-primary/80 transition-colors">
+                            查看演示 <i class="fa fa-external-link ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
 
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
+                <!-- 项目2 -->
+                <div
+                    class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 shadow-lg card-hover animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-200">
+                    <div class="h-48 overflow-hidden">
+                        <img src="./img/yuanshu.png" alt="元枢"
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold">元枢</h3>
+                            <span class="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full">全栈独立开发</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            支持多角色权限控制的后台管理系统，涵盖8大核心模块，助力小微企业日常运营管理，完成超23,000行代码编写。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">Vue3</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">Node.js</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">权限控制</span>
+                        </div>
+                        <a href="http://118.89.54.124:8080" target="_blank"
+                            class="inline-flex items-center text-primary hover:text-primary/80 transition-colors">
+                            查看演示 <i class="fa fa-external-link ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
 
-        // 关闭移动端菜单
-        document.getElementById('mobileMenu').classList.add('hidden');
+                <!-- 项目3 -->
+                <div
+                    class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 shadow-lg card-hover animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-300">
+                    <div class="h-48 overflow-hidden">
+                        <img src="./img/flhome.png" alt="飞行之家"
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold">飞行之家</h3>
+                            <span class="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full">全栈独立开发</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            为飞行器爱好者打造的交流空间，实现留言、评论、点赞等核心互动功能，首屏加载时间缩至2秒内。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">Vue3</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">Node.js</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">MySQL</span>
+                            <span class="text-xs bg-gray-800 px-2 py-1 rounded">Docker</span>
+                        </div>
+                        <a href="http://118.89.54.124:8000" target="_blank"
+                            class="inline-flex items-center text-primary hover:text-primary/80 transition-colors">
+                            查看演示 <i class="fa fa-external-link ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
+    <!-- 经历 -->
+    <section id="experience" class="py-24 bg-gray-900/50 relative">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">我的经历</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+                    我不断通过实践提升自己的技术能力，积累了丰富的项目开发和实习经验。
+                </p>
+            </div>
 
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
+            <div class="relative">
+                <!-- 时间线 -->
+                <div
+                    class="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-700 transform -translate-x-1/2">
+                </div>
 
-    // 滚动时导航栏样式变化
-    window.addEventListener('scroll', function () {
-      const nav = document.querySelector('nav');
-      if (window.scrollY > 100) {
-        nav.classList.add('shadow');
-      } else {
-        nav.classList.remove('shadow');
-      }
-    });
-  </script>
+                <!-- 实习经历 -->
+                <div
+                    class="relative mb-16 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-100">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1 mt-6 md:mt-0">
+                            <span class="text-sm text-primary font-medium">2025.03 - 2025.05</span>
+                            <h3 class="text-2xl font-bold mt-1">前端开发工程师</h3>
+                            <p class="text-gray-400 mt-1">深圳市北天通讯有限公司</p>
+                            <ul class="mt-4 space-y-2 text-gray-300">
+                                <li class="flex md:justify-end items-start md:items-center">
+                                    <span class="md:order-2">参与管理平台基础页面开发，保障首页布局契合设计规范</span>
+                                    <i class="fa fa-check-circle text-secondary md:mr-2 md:order-1 mt-1 md:mt-0"></i>
+                                </li>
+                                <li class="flex md:justify-end items-start md:items-center">
+                                    <span class="md:order-2">负责用户管理模块，实现分页查询与批量操作，提升用户体验</span>
+                                    <i class="fa fa-check-circle text-secondary md:mr-2 md:order-1 mt-1 md:mt-0"></i>
+                                </li>
+                                <li class="flex md:justify-end items-start md:items-center">
+                                    <span class="md:order-2">高效完成消息管理功能开发，实现列表渲染及状态切换</span>
+                                    <i class="fa fa-check-circle text-secondary md:mr-2 md:order-1 mt-1 md:mt-0"></i>
+                                </li>
+                                <li class="flex md:justify-end items-start md:items-center">
+                                    <span class="md:order-2">协同助力文件管理模块，完成单文件上传功能开发</span>
+                                    <i class="fa fa-check-circle text-secondary md:mr-2 md:order-1 mt-1 md:mt-0"></i>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="md:w-12 flex justify-center order-1 md:order-2">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10 shadow-lg shadow-primary/30">
+                                <i class="fa fa-briefcase"></i>
+                            </div>
+                        </div>
+
+                        <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
+                    </div>
+                </div>
+
+                <!-- 学习经历 -->
+                <div class="relative animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-200">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
+
+                        <div class="md:w-12 flex justify-center order-1 md:order-2">
+                            <div
+                                class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center z-10 shadow-lg shadow-secondary/30">
+                                <i class="fa fa-graduation-cap"></i>
+                            </div>
+                        </div>
+
+                        <div class="md:w-1/2 md:pl-12 order-2 md:order-3 mt-6 md:mt-0">
+                            <span class="text-sm text-secondary font-medium">2022.09 - 2025.07</span>
+                            <h3 class="text-2xl font-bold mt-1">数字媒体技术专业</h3>
+                            <p class="text-gray-400 mt-1">罗定职业技术学院</p>
+                            <p class="mt-4 text-gray-300">
+                                在校期间，系统学习了数字媒体技术相关课程，包括前端开发、后端开发、数据库设计等，GPA 3.5/4.0。
+                                积极参与各类实践项目，不断提升自己的技术能力和解决问题的能力。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="py-24 relative">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">联系我</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+                    无论您有项目合作、工作机会还是技术交流，都欢迎与我联系。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-100">
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-400 mb-1">姓名</label>
+                            <input type="text" id="name"
+                                class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                                placeholder="您的姓名">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-400 mb-1">邮箱</label>
+                            <input type="email" id="email"
+                                class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                                placeholder="您的邮箱">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-400 mb-1">留言</label>
+                            <textarea id="message" rows="5"
+                                class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
+                                placeholder="请输入您的留言..."></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3 bg-primary hover:bg-primary/90 rounded-lg font-medium transition-all shadow-lg shadow-primary/20">
+                            发送消息
+                        </button>
+                    </form>
+                </div>
+
+                <div class="space-y-8 animate-on-scroll opacity-0 translate-y-4 transition-all duration-700 delay-200">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6">联系方式</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-400">电话</div>
+                                    <div>18124630859</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-weixin"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-400">微信</div>
+                                    <div>WJL18124630859</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-400">邮箱</div>
+                                    <div>wujl1124@qq.com</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fa fa-github"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-400">GitHub</div>
+                                    <a href="https://github.com/Wjl1224734792" target="_blank"
+                                        class="hover:text-primary transition-colors">github.com/Wjl1224734792</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">社交媒体</h3>
+                        <div class="flex gap-4">
+                            <a href="#"
+                                class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all">
+                                <i class="fa fa-github text-xl"></i>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all">
+                                <i class="fa fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all">
+                                <i class="fa fa-codepen text-xl"></i>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all">
+                                <i class="fa fa-weibo text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gradient bg-gradient-to-r from-primary to-secondary text-2xl font-bold mb-4 md:mb-0">
+                    吴建霖
+                </div>
+                <div class="text-gray-400 text-sm">
+                    © 2025 吴建霖. 保留所有权利.
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <a href="#hero" class="text-gray-400 hover:text-primary transition-colors">
+                        <i class="fa fa-arrow-up"></i> 回到顶部
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        // 移动端菜单
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // 关闭移动菜单（如果打开）
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = menuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 滚动触发动画
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (elementPosition < windowHeight * 0.85) {
+                    element.classList.add('opacity-100', 'translate-y-0');
+                    element.classList.remove('opacity-0', 'translate-y-4');
+
+                    // 启动技能条动画
+                    if (element.querySelector('.skill-progress')) {
+                        setTimeout(() => {
+                            document.querySelectorAll('.skill-progress').forEach(progress => {
+                                progress.style.width = progress.getAttribute('data-width');
+                            });
+                        }, 300);
+                    }
+                }
+            });
+        };
+
+        // 初始化技能图表
+        const initSkillsChart = () => {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Vue3/Uniapp', 'JavaScript/TS', 'HTML/CSS', 'Node.js', 'AI应用', 'UI/UX设计'],
+                    datasets: [{
+                        label: '技能熟练度',
+                        data: [90, 85, 95, 80, 85, 75],
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: 'rgba(255, 255, 255, 0.5)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        // 页面加载和滚动时触发动画
+        window.addEventListener('load', () => {
+            animateOnScroll();
+            initSkillsChart();
+        });
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
 </body>
 
 </html>
